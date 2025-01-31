@@ -3,9 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon site GitHub Pages</title>
+    <title>Voyage à New York</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Bienvenue sur mon site hébergé via GitHub Pages !</h1>
+    <header>
+        <h1>Voyage à New York</h1>
+        <img src="banner.jpg" alt="Bandeau de New York" class="banner">
+    </header>
+    
+    <main>
+        <button id="add-link">Ajouter un lien</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Lien</th>
+                    <th>Description</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody id="link-table">
+                <tr>
+                    <td><a href="https://www.nycgo.com/" target="_blank">NYC Officiel</a></td>
+                    <td>Le site officiel du tourisme à New York.</td>
+                    <td><img src="nyc.jpg" alt="NYC"></td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+    
+    <script>
+        document.getElementById("add-link").addEventListener("click", function() {
+            let url = prompt("Entrez l'URL du lien :");
+            let desc = prompt("Entrez la description :");
+            let img = prompt("Entrez l'URL de l'image :");
+            
+            if (url && desc && img) {
+                let table = document.getElementById("link-table");
+                let row = document.createElement("tr");
+                
+                row.innerHTML = `
+                    <td><a href="${url}" target="_blank">${url}</a></td>
+                    <td>${desc}</td>
+                    <td><img src="${img}" alt="Image"></td>
+                `;
+                
+                table.appendChild(row);
+            }
+        });
+    </script>
 </body>
 </html>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        text-align: center;
+    }
+    header {
+        background: url('banner.jpg') no-repeat center center/cover;
+        padding: 50px 0;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    th, td {
+        padding: 15px;
+        text-align: left;
+    }
+    th {
+        background: #0073e6;
+        color: white;
+    }
+    tr:nth-child(even) {
+        background: #f9f9f9;
+    }
+    img {
+        width: 100px;
+        height: auto;
+        border-radius: 5px;
+    }
+    button {
+        background: #0073e6;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        margin: 20px;
+        border-radius: 5px;
+    }
+    button:hover {
+        background: #005bb5;
+    }
+</style>
