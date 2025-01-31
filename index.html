@@ -8,102 +8,123 @@
 </head>
 <body>
     <header>
-        <h1>Voyage à New York</h1>
-        <img src="banner.jpg" alt="Bandeau de New York" class="banner">
+        <h1></h1>
     </header>
     
     <main>
-        <button id="add-link">Ajouter un lien</button>
-        <table>
-            <thead>
-                <tr>
-                    <th>Lien</th>
-                    <th>Description</th>
-                    <th>Image</th>
-                </tr>
-            </thead>
-            <tbody id="link-table">
-                <tr>
-                    <td><a href="https://www.nycgo.com/" target="_blank">NYC Officiel</a></td>
-                    <td>Le site officiel du tourisme à New York.</td>
-                    <td><img src="nyc.jpg" alt="NYC"></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="grid-container" id="link-grid"></div>
     </main>
     
     <script>
-        document.getElementById("add-link").addEventListener("click", function() {
-            let url = prompt("Entrez l'URL du lien :");
-            let desc = prompt("Entrez la description :");
-            let img = prompt("Entrez l'URL de l'image :");
-            
-            if (url && desc && img) {
-                let table = document.getElementById("link-table");
-                let row = document.createElement("tr");
-                
-                row.innerHTML = `
-                    <td><a href="${url}" target="_blank">${url}</a></td>
-                    <td>${desc}</td>
-                    <td><img src="${img}" alt="Image"></td>
-                `;
-                
-                table.appendChild(row);
-            }
-        });
+        function loadLinks() {
+            fetch('links.txt')
+                .then(response => response.text())
+                .then(data => {
+                    let grid = document.getElementById("link-grid");
+                    let lines = data.trim().split("\n");
+
+                    lines.forEach(line => {
+                        let parts = line.split(" | ");
+                        if (parts.length === 3) {
+                            let url = parts[0].trim();
+                            let desc = parts[1].trim();
+                            let img = parts[2].trim();
+
+                            let tileContainer = document.createElement("div");
+                            tileContainer.classList.add("tile-container");
+
+                            let tile = document.createElement("div");
+                            tile.classList.add("tile");
+                            tile.style.backgroundImage = `url('${img}')`;
+
+                            let link = document.createElement("a");
+                            link.href = url;
+                            link.target = "_blank";
+                            link.appendChild(tile);
+
+                            let description = document.createElement("p");
+                            description.classList.add("tile-description");
+                            description.textContent = desc;
+
+                            tileContainer.appendChild(link);
+                            tileContainer.appendChild(description);
+                            grid.appendChild(tileContainer);
+                        }
+                    });
+                })
+                .catch(error => console.error('Erreur de chargement des liens:', error));
+        }
+
+        document.addEventListener("DOMContentLoaded", loadLinks);
     </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        header {
+            background: url('images/nyc.png') no-repeat center center/cover;
+            height: 60vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1000px;
+            margin: auto;
+        }
+        .tile {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 150px; /* Hauteur fixe */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .tile:hover {
+            transform: scale(1.05);
+        }
+
+        .tile a {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .tile-container {
+            text-align: center;
+        }
+
+        .tile-description {
+            margin-top: 5px;
+            font-size: 1rem;
+            color: #333;
+        }
+
+       
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
 </body>
 </html>
-
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-        text-align: center;
-    }
-    header {
-        background: url('banner.jpg') no-repeat center center/cover;
-        padding: 50px 0;
-        color: white;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    }
-    table {
-        width: 80%;
-        margin: 20px auto;
-        border-collapse: collapse;
-        background: white;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    th, td {
-        padding: 15px;
-        text-align: left;
-    }
-    th {
-        background: #0073e6;
-        color: white;
-    }
-    tr:nth-child(even) {
-        background: #f9f9f9;
-    }
-    img {
-        width: 100px;
-        height: auto;
-        border-radius: 5px;
-    }
-    button {
-        background: #0073e6;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        cursor: pointer;
-        margin: 20px;
-        border-radius: 5px;
-    }
-    button:hover {
-        background: #005bb5;
-    }
-</style>
